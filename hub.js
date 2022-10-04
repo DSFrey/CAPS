@@ -1,8 +1,11 @@
 'use strict';
 
-const Event = require('events');
-const eventPool = new Event();
+const eventPool = require('./eventPool');
+const { driverHandler } = require('./modules/driver');
+const { deliveredHandler, pickupHandler } = require('./modules/vendor');
 
 eventPool.on('*', (payload) => console.log({ time: Date.now, payload }));
+eventPool.on('pickup', driverHandler);
+eventPool.on('delivered', deliveredHandler);
 
-module.exports = eventPool;
+pickupHandler('Store');

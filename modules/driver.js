@@ -1,6 +1,6 @@
 'use strict';
 
-const eventPool = require('../hub');
+const eventPool = require('../eventPool');
 
 let driverHandler = (payload) => {
   console.log(`DRIVER: picked up ${payload.orderID}`);

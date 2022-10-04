@@ -1,6 +1,6 @@
 'use strict';
 
-const eventPool = require('../hub');
+const eventPool = require('../eventPool');
 const chance = require('./chance');
 
 let pickupHandler = (store) => {
