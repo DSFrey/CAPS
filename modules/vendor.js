@@ -10,11 +10,12 @@ let pickupHandler = (store) => {
     customer: chance.name(),
     address: chance.address(),
   };
+  console.log(`VENDOR: ready for pickup ${payload.orderID}`);
   eventPool.emit('pickup', payload);
 };
 
 let deliveredHandler = (payload) => {
-  console.log(`Thank you, ${payload.customer}`);
+  console.log(`VENDOR: Thank you, ${payload.customer}`);
 };
 
 module.exports = { pickupHandler, deliveredHandler };
