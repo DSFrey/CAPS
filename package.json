@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/DSFrey/CAPS#readme",
   "dependencies": {
+    "chance": "^1.1.8",
     "eslint": "^8.24.0",
     "express": "^4.18.1"
   }
