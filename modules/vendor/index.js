@@ -1,23 +1,33 @@
 'use strict';
 
-const eventPool = require('../eventPool');
-const chance = require('./chance');
+const Chance = require('chance');
+const chance = new Chance();
 
-let pickupHandler = (store) => {
-  let payload = {
-    store,
-    orderID: chance.guid(),
-    customer: chance.name(),
-    address: chance.address(),
-  };
-  console.log(`VENDOR: ready for pickup ${payload.orderID}`);
-  eventPool.emit('pickup', payload);
-};
+const { io } = require('socket.io-client');
+socket = io('http://localhost:3001/caps');
 
-let deliveredHandler = (payload) => {
-  console.log(`VENDOR: Thank you, ${payload.customer}`);
-};
+class Vendor {
+  constructor(vendorName) {
+    this.name = vendorName;
+    socket.join(vendorName);
+    socket.on('pickup', (payload) => console.log(`Order picked up ${payload.orderID}`));
+    socket.on('delivered', (payload) => console.log(`Order delivered. Thank you, ${payload.customer}`));
+  }
+  readyOrder() {
+    let payload = {
+      store: this.name,
+      orderID: chance.guid(),
+      customer: chance.name(),
+      address: chance.address(),
+    };
+    console.log(`Ready for pickup ${payload.orderID}`);
+    socket.emit('ready', payload);
 
-eventPool.on('delivered', deliveredHandler);
+  }
+}
 
-module.exports = { pickupHandler, deliveredHandler };
+let vendor1 = new Vendor(chance.company());
+let vendor2 = new Vendor(chance.company());
+
+setInterval(() => vendor1.readyOrder(), 5000);
+setInterval(() => vendor2.readyOrder(), 8000);
