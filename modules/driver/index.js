@@ -9,4 +9,6 @@ let driverHandler = (payload) => {
   eventPool.emit('delivered', payload);
 };
 
+eventPool.on('pickup', driverHandler);
+
 module.exports = { driverHandler };

@@ -18,4 +18,6 @@ let deliveredHandler = (payload) => {
   console.log(`VENDOR: Thank you, ${payload.customer}`);
 };
 
+eventPool.on('delivered', deliveredHandler);
+
 module.exports = { pickupHandler, deliveredHandler };
