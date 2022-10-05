@@ -4,7 +4,7 @@ const Chance = require('chance');
 const chance = new Chance();
 
 const { io } = require('socket.io-client');
-socket = io('http://localhost:3001/caps');
+let socket = io('http://localhost:3001/caps');
 
 class Vendor {
   constructor(vendorName) {
