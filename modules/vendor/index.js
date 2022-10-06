@@ -3,15 +3,17 @@
 const Chance = require('chance');
 const chance = new Chance();
 
-const { io } = require('socket.io-client');
-let socket = io('http://localhost:3001/caps');
+require('dotenv').config({ path: '../../.env' });
+
+const io = require('socket.io-client');
+let socket = io.connect(`http://localhost:${process.env.PORT}/caps`);
 
 class Vendor {
   constructor(vendorName) {
     this.name = vendorName;
-    socket.join(vendorName);
-    socket.on('pickup', (payload) => console.log(`Order picked up ${payload.orderID}`));
-    socket.on('delivered', (payload) => console.log(`Order delivered. Thank you, ${payload.customer}`));
+    socket.emit('join', vendorName);
+    socket.on('pickup', (payload) => console.log(`${this.name}: Order picked up ${payload.orderID}`));
+    socket.on('delivered', (payload) => console.log(`${this.name}: Order delivered. Thank you, ${payload.customer}`));
   }
   readyOrder() {
     let payload = {
@@ -20,7 +22,7 @@ class Vendor {
       customer: chance.name(),
       address: chance.address(),
     };
-    console.log(`Ready for pickup ${payload.orderID}`);
+    console.log(`${this.name}: Ready for pickup ${payload.orderID}`);
     socket.emit('ready', payload);
 
   }
