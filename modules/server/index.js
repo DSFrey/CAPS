@@ -16,7 +16,7 @@ caps.on('connection', socket => {
 
   socket.on('ready', (payload) => {
     new EventLog('Ready for pickup', payload).log();
-    socket.emit('pickup', payload);
+    socket.broadcast.emit('pickup', payload);
   });
 
   socket.on('in-transit', (payload) => {
