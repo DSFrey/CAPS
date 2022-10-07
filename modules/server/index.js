@@ -9,23 +9,24 @@ const caps = server.of('/caps');
 caps.on('connection', socket => {
   console.log('Socket connected to caps namespace: ', socket.id);
 
+  socket.prependAny((eventName, payload) => {
+    new EventLog(eventName, payload).log();
+  });
+
   socket.on('join', (store) => {
     socket.join(store);
-    console.log(store);
   });
 
   socket.on('ready', (payload) => {
-    new EventLog('Ready for pickup', payload).log();
-    socket.broadcast.emit('pickup', payload);
+    socket.broadcast.emit('load', payload);
   });
 
-  socket.on('in-transit', (payload) => {
-    new EventLog('in-transit', payload).log();
+  socket.on('in-transit', (payload) =>{
+    socket.to(payload.store).emit('pickup', payload);
   });
 
   socket.on('delivered', (payload) => {
-    new EventLog('delivered', payload).log();
-    socket.broadcast.to(payload.store).emit('delivered', payload);
+    socket.to(payload.store).emit('delivered', payload);
   });
 });
 

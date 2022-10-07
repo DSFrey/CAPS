@@ -6,14 +6,14 @@ const chance = new Chance();
 require('dotenv').config({ path: '../../.env' });
 
 const io = require('socket.io-client');
-let socket = io.connect(`http://localhost:${process.env.PORT}/caps`);
 
 class Vendor {
   constructor(vendorName) {
+    this.socket = io.connect(`http://localhost:${process.env.PORT}/caps`);
     this.name = vendorName;
-    socket.emit('join', vendorName);
-    socket.on('pickup', (payload) => console.log(`${this.name}: Order picked up ${payload.orderID}`));
-    socket.on('delivered', (payload) => console.log(`${this.name}: Order delivered. Thank you, ${payload.customer}`));
+    this.socket.emit('join', vendorName);
+    this.socket.on('pickup', (payload) => console.log(`${this.name}: Order picked up ${payload.orderID}`));
+    this.socket.on('delivered', (payload) => console.log(`${this.name}: Order delivered. Thank you, ${payload.customer}`));
   }
   readyOrder() {
     let payload = {
@@ -23,7 +23,7 @@ class Vendor {
       address: chance.address(),
     };
     console.log(`${this.name}: Ready for pickup ${payload.orderID}`);
-    socket.emit('ready', payload);
+    this.socket.emit('ready', payload);
 
   }
 }
@@ -31,5 +31,5 @@ class Vendor {
 let vendor1 = new Vendor(chance.company());
 let vendor2 = new Vendor(chance.company());
 
-setInterval(() => vendor1.readyOrder(), 5000);
-setInterval(() => vendor2.readyOrder(), 8000);
+setInterval(() => vendor1.readyOrder(), 15000);
+setInterval(() => vendor2.readyOrder(), 28000);
