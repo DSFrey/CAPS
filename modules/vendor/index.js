@@ -18,6 +18,7 @@ class Vendor {
   readyOrder() {
     let payload = {
       store: this.name,
+      queueID: 'driver',
       orderID: chance.guid(),
       customer: chance.name(),
       address: chance.address(),
@@ -31,5 +32,5 @@ class Vendor {
 let vendor1 = new Vendor(chance.company());
 let vendor2 = new Vendor(chance.company());
 
-setInterval(() => vendor1.readyOrder(), 15000);
-setInterval(() => vendor2.readyOrder(), 28000);
+setInterval(() => vendor1.readyOrder(), 30000);
+setTimeout(() => setInterval(() => vendor2.readyOrder(), 30000), 15000);
