@@ -1,27 +1,27 @@
 'use strict';
 
-class Queue{
-  constructor(){
+class Queue {
+  constructor() {
     this.data = {};
   }
 
-  store(key, value){
-    this.data[key] = value;
-    // might look something like this:
-    // this.key.banana = 'mmmm banana';
-    return key;
+  store(payload) {
+    if (!this.data[payload.queueID]) {
+      this.data[payload.queueID] = new this();
+    }
+    this.data[payload.queueID].data[payload.messageID] = payload;
   }
 
-  read(key){
+  retrieve(key) {
     return this.data[key];
   }
 
-  remove(key){
-    console.log(`${key} was removed from queue`);
-    let value = this.data[key];
-    delete this.data[key];
-    return value;
+  remove(queueID, messageID) {
+    if (!this.data[queueID]) throw new Error('No queue created');
+    console.log(`${messageID} was removed from queue`);
+    delete this.data[queueID].data[messageID];
+    return messageID;
   }
 }
 
-module.exports = Queue;
+module.exports = { Queue };

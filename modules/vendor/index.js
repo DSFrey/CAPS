@@ -20,6 +20,7 @@ class Vendor {
       store: this.name,
       queueID: 'driver',
       orderID: chance.guid(),
+      messageID: chance.guid(),
       customer: chance.name(),
       address: chance.address(),
     };
