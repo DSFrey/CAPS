@@ -16,18 +16,19 @@ caps.on('connection', socket => {
     new EventLog(payload).log();
   });
 
-  socket.on('join', (store) => {
-    socket.join(store);
+  socket.on('join', (payload) => {
+    socket.join(payload.queueID);
   });
 
   socket.on('ready', (payload) => {
+
     messageQueue.store(payload);
-    socket.broadcast.emit('load', payload);
+    socket.broadcast.emit('ready', payload);
   });
 
   socket.on('in-transit', (payload) => {
     messageQueue.store(payload);
-    socket.to(payload.store).emit('pickup', payload);
+    socket.to(payload.store).emit('in-transit', payload);
   });
 
   socket.on('delivered', (payload) => {
@@ -35,11 +36,12 @@ caps.on('connection', socket => {
     socket.to(payload.store).emit('delivered', payload);
   });
 
-  socket.on('get-all', (queueID) => {
-    let currentQueue = messageQueue.retrieve(queueID);
+  socket.on('get-all', (payload) => {
+    let currentQueue = messageQueue.retrieve(payload.queueID);
     if (currentQueue) {
-      Object.keys(currentQueue).forEach(messageID => {
+      Object.keys(currentQueue.data).forEach(messageID => {
         let payload = currentQueue.retrieve(messageID);
+        console.log(payload);
         socket.emit(payload.event, payload);
       });
     }

@@ -11,9 +11,9 @@ class Vendor {
   constructor(vendorName) {
     this.socket = io.connect(`http://localhost:${process.env.PORT}/caps`);
     this.name = vendorName;
-    this.socket.emit('join', vendorName);
-    this.socket.emit('get-all', vendorName);
-    this.socket.on('pickup', (payload) => {
+    this.socket.emit('join', {queueID: vendorName});
+    this.socket.emit('get-all', {queueID: vendorName});
+    this.socket.on('in-transit', (payload) => {
       this.received(payload);
       console.log(`${this.name}: Order picked up ${payload.orderID}`);
     });
@@ -38,7 +38,7 @@ class Vendor {
   received(payload) {
     let id = {
       queueID: payload.queueID,
-      orderID: payload.orderID
+      messageID: payload.messageID
     }
     this.socket.emit('received', id)
   }

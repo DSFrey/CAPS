@@ -8,12 +8,12 @@ const chance = new Chance();
 const io = require('socket.io-client');
 let socket = io.connect(`http://localhost:${process.env.PORT}/caps`);
 
-socket.emit('get-all', 'driver');
+socket.emit('get-all', {queueID: 'driver'});
 
-socket.on('load', (payload) => {
+socket.on('ready', (payload) => {
+  received(payload);
   setTimeout(() => {
     console.log(`Picked up ${payload.orderID}`);
-    received(payload);
     payload.queueID = payload.store;
     payload.messageID = chance.guid();
     socket.emit('in-transit', payload);
@@ -28,7 +28,7 @@ socket.on('load', (payload) => {
 function received(payload) {
   let id = {
     queueID: payload.queueID,
-    orderID: payload.orderID,
+    messageID: payload.messageID,
   };
-  this.socket.emit('received', id);
+  socket.emit('received', id);
 }

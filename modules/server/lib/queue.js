@@ -7,7 +7,7 @@ class Queue {
 
   store(payload) {
     if (!this.data[payload.queueID]) {
-      this.data[payload.queueID] = new this();
+      this.data[payload.queueID] = new this.constructor();
     }
     this.data[payload.queueID].data[payload.messageID] = payload;
   }
