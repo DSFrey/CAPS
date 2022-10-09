@@ -26,12 +26,11 @@ In three separate terminals:
 - navigate to `modules/driver` then run node `index.js`
 - navigate to `modules/vendor` then run node `index.js`
 
-<!-- ### Features / Routes
+### Features
 
-- Feature One: Details of feature
-- GET : `/hello` - specific route to hit
+- Maintains a queue to store events until a client connects and receives them.
 
-### Tests
+<!-- ### Tests
 
 - How do you run tests?
 - Any tests of note?
@@ -41,3 +40,4 @@ In three separate terminals:
 
 ![CAPS UML phase 1](./assets/CAPS-Phase-1.png)
 ![CAPS UML phase 2](./assets/CAPS-Phase-2.png)
+![CAPS UML phase 3](./assets/CAPS-Phase-3.png)
